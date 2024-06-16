@@ -14,7 +14,7 @@ from sklearn.ensemble import RandomForestClassifier
 
 final_score = 0
 
-dfmain = pd.read_csv('Problem_1_Python/final_dataset.csv', encoding='latin1') #encoding because of special chars
+dfmain = pd.read_csv('final_dataset.csv', encoding='latin1') #encoding because of special chars
 
 intinput = int(input("Enter Input Entry field (0-7651)")) #For now using this, ideally our interface should have something jisme cust inp daalsake#
 
@@ -29,7 +29,7 @@ if (dfmain['verified'].iloc[intinput])==0:
 #======================Parameter C: Classifier=============================#
 nltk.download('stopwords')
 
-df = pd.read_csv('Problem_1_Python/synthetic_reviews.csv')
+df = pd.read_csv('synthetic_reviews.csv')
 
 df['review'] = df['review'].apply(lambda x: x.replace('\r\n', ' ')) 
 
