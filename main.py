@@ -29,9 +29,9 @@ if (dfmain['verified'].iloc[intinput])==0:
 #======================Parameter C: Classifier=============================#
 nltk.download('stopwords')
 
-df = pd.read_csv('synthetic_reviews.csv')
+df = pd.read_csv('Classifier_dataset.csv')
 
-df['review'] = df['review'].apply(lambda x: x.replace('\r\n', ' ')) 
+df['text_'] = df['text_'].apply(lambda x: x.replace('\r\n', ' ')) 
 
 
 #stemming 
@@ -41,18 +41,18 @@ corpus = []
 stopwords_set = set(stopwords.words('english'))
 
 for i in range(len(df)):
-    review = df['review'].iloc[i].lower()
-    review = review.translate(str.maketrans('','',string.punctuation)).split()
-    review = [stemmer.stem(word) for word in review if word not in stopwords_set]
-    review = ''.join(review)
-    corpus.append(review)
+    text = df['text_'].iloc[i].lower()
+    text = text.translate(str.maketrans('','',string.punctuation)).split()
+    text = [stemmer.stem(word) for word in text if word not in stopwords_set]
+    text = ''.join(text)
+    corpus.append(text)
 
 
 #vectorize 
 vectorizer = CountVectorizer()
 
 x = vectorizer.fit_transform(corpus).toarray()
-y = df.label
+y = df.label_num
 
 x_train, x_test, y_train, y_test = train_test_split(x, y, test_size = 0.2)
 
@@ -61,7 +61,7 @@ clf.fit(x_train, y_train)
 
 
 
-
+print(clf.score())
 #email_to_classify = df.text.values[10]
 def finrev():
     inputint = int(input("Enter an index from the database (0-9999):"))
