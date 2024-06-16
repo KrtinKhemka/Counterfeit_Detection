@@ -47,10 +47,10 @@ for i in range(len(df)):
     text = ''.join(text)
     corpus.append(text)
 
-
+print(corpus[0])
 #vectorize 
 vectorizer = CountVectorizer()
-
+print(vectorizer)
 x = vectorizer.fit_transform(corpus).toarray()
 y = df.label_num
 
@@ -61,7 +61,7 @@ clf.fit(x_train, y_train)
 
 
 
-print(clf.score())
+
 #email_to_classify = df.text.values[10]
 def finrev():
     inputint = int(input("Enter an index from the database (0-9999):"))
