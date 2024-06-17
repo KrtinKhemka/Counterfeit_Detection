@@ -7,10 +7,12 @@ import nltk
 from nltk.corpus import stopwords
 from nltk.stem.porter import PorterStemmer
 
-from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.model_selection import train_test_split
-from sklearn.ensemble import RandomForestClassifier
+from sklearn.naive_bayes import MultinomialNB
+from sklearn.metrics import accuracy_score
 
+pd.options.display.memory_usage = 'deep'
 
 final_score = 0
 
@@ -29,7 +31,8 @@ if (dfmain['verified'].iloc[intinput])==0:
 #======================Parameter C: Classifier=============================#
 nltk.download('stopwords')
 
-df = pd.read_csv('Classifier_dataset.csv')
+df = pd.read_csv('Classifier_dataset.csv', usecols = ["text_", "label_num"], dtype={"label_num" : "int8"})
+
 
 df['text_'] = df['text_'].apply(lambda x: x.replace('\r\n', ' ')) 
 
@@ -44,20 +47,19 @@ for i in range(len(df)):
     text = df['text_'].iloc[i].lower()
     text = text.translate(str.maketrans('','',string.punctuation)).split()
     text = [stemmer.stem(word) for word in text if word not in stopwords_set]
-    text = ''.join(text)
+    text = ' '.join(text)
     corpus.append(text)
 
-print(corpus[0])
+
 #vectorize 
-vectorizer = CountVectorizer()
-print(vectorizer)
+vectorizer = TfidfVectorizer()
 x = vectorizer.fit_transform(corpus).toarray()
-y = df.label_num
+y = df['label_num']
+x_train, x_test, y_train, y_test = train_test_split(x, y, test_size = 0.2, random_state=42)
 
-x_train, x_test, y_train, y_test = train_test_split(x, y, test_size = 0.2)
-
-clf = RandomForestClassifier(n_jobs=-1) #use all cpu cores
+clf = MultinomialNB()
 clf.fit(x_train, y_train)
+print(f"Model accuracy: {accuracy_score(y_test, clf.predict(x_test))}")
 
 
 
