@@ -12,6 +12,8 @@ from sklearn.model_selection import train_test_split
 from sklearn.naive_bayes import MultinomialNB
 from sklearn.metrics import accuracy_score
 
+from sklearn.cluster import KMeans
+
 pd.options.display.memory_usage = 'deep'
 
 final_score = 0
@@ -26,6 +28,14 @@ if (dfmain['verified'].iloc[intinput])==0:
     final_score+=25
 
 #======================Parameter B: NLP Analysis============================#
+
+                        #Part B1 -> K-mean clustering 
+documents = dfmain['review'].values.astype("U")
+vectorizer = TfidfVectorizer(stop_words='english')
+features = vectorizer.fit_transform(documents)
+k = 20
+model = KMeans(n_clusters=k, init = 'k-means++', max_iter= 100, n_init=1)
+model.fit(features)
 
 
 #======================Parameter C: Classifier=============================#
@@ -66,25 +76,7 @@ print(f"Model accuracy: {accuracy_score(y_test, clf.predict(x_test))}")
 
 #email_to_classify = df.text.values[10]
 def finrev():
-    inputint = int(input("Enter an index from the database (0-9999):"))
-    if (inputint<0 or inputint>9999):
-        print("INVALID")
-        return
-    else:
-        email_to_classify = df.review.values[inputint]
-        email_text = email_to_classify.lower().translate(str.maketrans('', '', string.punctuation)).split()
-        email_text = [stemmer.stem(word) for word in email_text if word not in stopwords_set]
-        email_text = ' '.join(email_text)
-
-        email_corpus = [email_text]
-
-        x_email = vectorizer.transform(email_corpus)
-
-        finval = clf.predict(x_email)
-        if finval[0] == 0:
-            print("Your email is not spam")
-        if finval[0] == 1:
-            print("Your email is spam")
+    print(final_score)
 
 
 
