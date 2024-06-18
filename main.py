@@ -12,7 +12,9 @@ from sklearn.model_selection import train_test_split
 from sklearn.naive_bayes import MultinomialNB
 from sklearn.metrics import accuracy_score
 
-from sklearn.cluster import KMeans
+from sklearn.cluster import KMeans, MiniBatchKMeans
+
+import matplotlib.pyplot as plt
 
 pd.options.display.memory_usage = 'deep'
 
@@ -28,14 +30,11 @@ if (dfmain['verified'].iloc[intinput])==0:
     final_score+=25
 
 #======================Parameter B: NLP Analysis============================#
+#step 1: Clustering
+    #from k calculation.py, optimal k=6
 
-                        #Part B1 -> K-mean clustering 
-documents = dfmain['review'].values.astype("U")
-vectorizer = TfidfVectorizer(stop_words='english')
-features = vectorizer.fit_transform(documents)
-k = 20
-model = KMeans(n_clusters=k, init = 'k-means++', max_iter= 100, n_init=1)
-model.fit(features)
+
+
 
 
 #======================Parameter C: Classifier=============================#
