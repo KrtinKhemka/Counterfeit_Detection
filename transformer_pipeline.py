@@ -4,3 +4,5 @@ import pandas as pd
 
 
 sent_pipeline = pipeline("sentiment-analysis")
+
+print(sent_pipeline('i love pizza'))
