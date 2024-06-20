@@ -29,13 +29,14 @@ for i in range(len(dfmain)):
     text = dfmain['review'].iloc[i]
     id = i
     Id.append(id)
-    res[id] = sia.polarity_scores(text)
+    print(polarity_scores_roberta(text))
+
 
 dfmain['Id'] = range(len(dfmain))
-vaders_result = pd.DataFrame(res).T
-vaders_result['Id'] = range(len(dfmain))
-vaders_result = vaders_result.merge(dfmain, how='left')
+result = pd.DataFrame(res).T
+result['Id'] = range(len(dfmain))
+vaders_result = result.merge(dfmain, how='left')
 #print(vaders_result['compound'])
-ax = sns.barplot(data = vaders_result, x = 'ratings', y='compound')
-ax.set_title('vader plot')
+ax = sns.barplot(data = result, x = 'ratings', y='compound')
+ax.set_title('roberta plot')
 plt.show()
