@@ -177,27 +177,29 @@ vaders_result = pd.DataFrame(res).T
 vaders_result['Id'] = range(len(dfmain))
 vaders_result = vaders_result.merge(dfmain, how='left')
 
-vaders_result['normalized_sentiment_score'] =  (vaders_result['compound']+1)/2
+vaders_result['normalized_sentiment_score'] =  vaders_result['compound'].apply(lambda x: 1 if abs(x) > 0.85 else 0)
 
 #ax = sns.barplot(data = vaders_result, x = 'ratings', y='compound')
 #ax.set_title('vader plot')
 #plt.show()
-#======================Parameter E: Helpful tag, Reviews/acc=============================#
+#======================Parameter E: Helpful tag=========================================#
 scaler = MinMaxScaler()
 dfmain['helpful_score'] = scaler.fit_transform(dfmain[['helpful']])
 
+#======================Parameter F: Reviews per account per day=================================#
 
+dfmain['normalized_most_rev'] = scaler.fit_transform(dfmain[['most_rev']])
 
-#email_to_classify = df.text.values[10]
 
 #======================================Main Function===========================================#
 
 weights = {
-    'verification_check' : 0.2,   #done
-    'Autoencoder' : 0.25,         #done
-    'Classifier' : 0.25,          #done
+    'verification_check' : 0.1,   
+    'Autoencoder' : 0.2,         
+    'Classifier' : 0.2,          
     'Sentiment_Score' : 0.15,
-    'Helpful_Score' : 0.15        #done
+    'Helpful_Score' : 0.15,
+    'normalized_most_rev' : 0.2        
 }
 
 
@@ -206,13 +208,14 @@ dfmain['FINAL_SCORE'] = (
     anomaly_score['anomaly_score'] * weights['Autoencoder'] +
     classifier['classifier_score'] * weights['Classifier'] +
     vaders_result['normalized_sentiment_score'] * weights['Sentiment_Score'] +
-    dfmain['helpful_score'] * weights['Helpful_Score']
+    dfmain['helpful_score'] * weights['Helpful_Score'] +
+    dfmain['normalized_most_rev'] * weights['normalized_most_rev']
 )
 
 
 
-dfmain['FINAL_SCORE'] = (dfmain['FINAL_SCORE'])*100
-dfmain['FINAL_SCORE'] = (dfmain['FINAL_SCORE'])*100
-dfmain['FINAL_SCORE'] = (dfmain['FINAL_SCORE'])//70.63406896551724
-print(dfmain['FINAL_SCORE'])
+dfmain['FINAL_SCORE'] = (dfmain['FINAL_SCORE'])*10000
+dfmain['FINAL_SCORE'] = (dfmain['FINAL_SCORE'])//56.80851063829788
+
+print(dfmain['FINAL_SCORE'].max())
 
