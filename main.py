@@ -185,21 +185,17 @@ vaders_result['normalized_sentiment_score'] =  vaders_result['compound'].apply(l
 #======================Parameter E: Helpful tag=========================================#
 scaler = MinMaxScaler()
 dfmain['helpful_score'] = scaler.fit_transform(dfmain[['helpful']])
-
-#======================Parameter F: Reviews per account per day=================================#
-
-dfmain['normalized_most_rev'] = scaler.fit_transform(dfmain[['most_rev']])
+dfmain['helpful_score'] = 1 - dfmain['helpful_score']
 
 
 #======================================Main Function===========================================#
 
 weights = {
-    'verification_check' : 0.1,   
+    'verification_check' : 0.25,   
     'Autoencoder' : 0.2,         
-    'Classifier' : 0.2,          
-    'Sentiment_Score' : 0.15,
-    'Helpful_Score' : 0.15,
-    'normalized_most_rev' : 0.2        
+    'Classifier' : 0.25,          
+    'Sentiment_Score' : 0.20,
+    'Helpful_Score' : 0.10,
 }
 
 
@@ -208,14 +204,13 @@ dfmain['FINAL_SCORE'] = (
     anomaly_score['anomaly_score'] * weights['Autoencoder'] +
     classifier['classifier_score'] * weights['Classifier'] +
     vaders_result['normalized_sentiment_score'] * weights['Sentiment_Score'] +
-    dfmain['helpful_score'] * weights['Helpful_Score'] +
-    dfmain['normalized_most_rev'] * weights['normalized_most_rev']
+    dfmain['helpful_score'] * weights['Helpful_Score'] 
 )
 
 
 
 dfmain['FINAL_SCORE'] = (dfmain['FINAL_SCORE'])*10000
-dfmain['FINAL_SCORE'] = (dfmain['FINAL_SCORE'])//56.80851063829788
+dfmain['FINAL_SCORE'] = dfmain['FINAL_SCORE']//79.999999999999
 
-print(dfmain['FINAL_SCORE'].max())
+#print(dfmain['FINAL_SCORE'].max())
 
