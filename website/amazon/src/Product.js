@@ -1,24 +1,28 @@
 import React from "react";
 import "./Product.css";
+import { Link } from "react-router-dom";
 
-function Product() {
+function Product({ id, title, image, price, rating }) {
   return (
     <div className="product">
       <div className="product_info">
-        <p>Product title</p>
+        <p> {title}</p>
         <p className="product_price">
           <small>$</small>
-          <strong>129</strong>
+          <strong>{price}</strong>
         </p>
         <div className="product_rating">
-          <p>⭐️</p>
+          {Array(rating)
+            .fill()
+            .map((_, i) => (
+              <p>⭐️</p>
+            ))}
         </div>
       </div>
-      <img
-        className="product_img"
-        src="https://assets.bosecreative.com/transform/d3eff9c4-3559-4155-b5ac-acebb58c4456/QCH24_Black_001_RGB.png"
-      />
-      <button>Add to Basket</button>
+      <img className="product_img" src={image} />
+      <Link to="/Productlisting">
+        <button className="Product_button">View Listing</button>
+      </Link>
     </div>
   );
 }
