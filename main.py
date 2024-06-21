@@ -2,8 +2,11 @@
 import string
 import numpy as np
 import pandas as pd
-
+import ssl
+ssl._create_default_https_context = ssl._create_unverified_context
 import nltk
+nltk.download('stopwords')
+nltk.download('vader_lexicon')
 from nltk.corpus import stopwords
 from nltk.stem.porter import PorterStemmer
 
@@ -105,7 +108,7 @@ anomaly_score = pd.DataFrame(anomaly_score_dict)
 #print(fake_reviews)
 
 #======================Parameter C: Classifier=============================#
-nltk.download('stopwords')
+
 
 df = pd.read_csv('Classifier_dataset.csv', usecols = ["text_", "label_num"], dtype={"label_num" : "int8"})
 
