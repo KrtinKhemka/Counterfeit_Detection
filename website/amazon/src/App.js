@@ -3,8 +3,10 @@ import Header from "./Header";
 import Home from "./Home";
 import Productlisting from "./Productlisting";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Resct, { useState, useEffect } from "react";
 
 function App() {
+  const [data, setData] = useState([{}]);
   return (
     //BEM
     <Router>
