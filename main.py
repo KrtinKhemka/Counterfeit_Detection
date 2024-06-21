@@ -76,7 +76,6 @@ print(fake_reviews)
 
 
 
-#from k calculation.py, optimal k=6
 
 #======================Parameter C: Classifier=============================#
 nltk.download('stopwords')
@@ -115,6 +114,7 @@ print(f"Model accuracy: {accuracy_score(y_test, clf.predict(x_test))}")
 #======================Parameter D: Sentiment Analysis=============================#
 
 #======================Parameter E: Helpful tag, Reviews/acc=============================#
+print('hi')
 #email_to_classify = df.text.values[10]
 def finrev():
     print(final_score)
