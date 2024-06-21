@@ -15,26 +15,43 @@ from sklearn.metrics import accuracy_score
 from sklearn.cluster import KMeans, MiniBatchKMeans
 
 import matplotlib.pyplot as plt
+import seaborn as sns
 
 from sklearn.decomposition import PCA
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
+
+from tqdm.notebook import tqdm
 
 from tensorflow.keras.preprocessing.text import Tokenizer
 from tensorflow.keras.preprocessing.sequence import pad_sequences
 from tensorflow.keras.layers import Input, Dense
 from tensorflow.keras.models import Model
+
+
+from sklearn.preprocessing import MinMaxScaler
 pd.options.display.memory_usage = 'deep'
 
-final_score = 0
+
 
 dfmain = pd.read_csv('final_dataset.csv', encoding='latin1') #encoding because of special chars
+dfmain['Id'] = range(len(dfmain))
+cols = ['Id'] + [col for col in dfmain.columns if col != 'Id']
+dfmain = dfmain[cols]
 
-intinput = int(input("Enter Input Entry field (0-7651)")) #For now using this, ideally our interface should have something jisme cust inp daalsake#
-
-
+#plt.style.use('ggplot')
 #======================Parameter A: Verification Check=====================#
-if (dfmain['verified'].iloc[intinput])==0:
-    final_score+=25
+verified = dfmain['verified']
+
+verified_dict = []
+for i in range(len(verified)):
+    id = i
+    verified_dict.append({'Id':id, 'verification_score':verified[i]})
+    
+
+verified = pd.DataFrame(verified_dict)
+verified['invert_verification_score'] = 1 - verified['verification_score']  # 0 for verified, 1 for not
+
+
 
 #======================Parameter B: Autoencoder for anomaly detection============================#
 texts = dfmain['review'] 
@@ -72,10 +89,18 @@ anomalies = mse > threshold
 # Flag potential fake reviews
 fake_reviews = dfmain[anomalies]
 
-print(fake_reviews)
+anomaly_score_dict = []
+for i in range(len(anomalies)):
+    id = i
+    score = 1 if anomalies[i] else 0 
+    anomaly_score_dict.append({'Id':id, 'anomaly_score':score})
+    
+
+anomaly_score = pd.DataFrame(anomaly_score_dict)
 
 
 
+#print(fake_reviews)
 
 #======================Parameter C: Classifier=============================#
 nltk.download('stopwords')
@@ -108,19 +133,86 @@ x_train, x_test, y_train, y_test = train_test_split(x, y, test_size = 0.2, rando
 
 clf = MultinomialNB()
 clf.fit(x_train, y_train)
-print(f"Model accuracy: {accuracy_score(y_test, clf.predict(x_test))}")
+#print(f"Model accuracy: {accuracy_score(y_test, clf.predict(x_test))}")
 
+arr_classifier = []
+for i in range(len(dfmain)):
+    to_classify = dfmain['review'].iloc[i].lower()
+    to_classify = to_classify.translate(str.maketrans('','',string.punctuation)).split()
+    to_classify = [stemmer.stem(word) for word in to_classify if word not in stopwords_set]
+    to_classify = ' '.join(to_classify)
+    review_corpus = [to_classify]
+    x_review = vectorizer.transform(review_corpus)
 
-#======================Parameter D: Sentiment Analysis=============================#
-
-#======================Parameter E: Helpful tag, Reviews/acc=============================#
-
-#email_to_classify = df.text.values[10]
-def finrev():
-    print(final_score)
+    classifier_score = clf.predict(x_review)
+    arr_classifier.append(classifier_score[0])
+    
+classifier_dict = []
+for i in range(len(arr_classifier)):
+    id = i
+    classifier_dict.append({'Id':id, 'classifier_score':arr_classifier[i]})
     
 
+classifier = pd.DataFrame(classifier_dict)
+
+#======================Parameter D: Sentiment Analysis=============================#
+#ax = dfmain['ratings'].value_counts().sort_index().plot(kind='bar', title='Review Count by Stars', figsize = (10,5))
+
+#ax.set_xlabel('review star')
+#ax.set_ylabel('Number')
+#plt.show()
+pd.set_option('display.max_columns', None)  # Show all columns 
+pd.set_option('display.width', 1000)
+sia = SentimentIntensityAnalyzer()
+res = {}
+Id=[]
+for i in range(len(dfmain)):
+    text = dfmain['review'].iloc[i]
+    id = i
+    Id.append(id)
+    res[id] = sia.polarity_scores(text)
+
+dfmain['Id'] = range(len(dfmain))
+vaders_result = pd.DataFrame(res).T
+vaders_result['Id'] = range(len(dfmain))
+vaders_result = vaders_result.merge(dfmain, how='left')
+
+vaders_result['normalized_sentiment_score'] =  (vaders_result['compound']+1)/2
+
+#ax = sns.barplot(data = vaders_result, x = 'ratings', y='compound')
+#ax.set_title('vader plot')
+#plt.show()
+#======================Parameter E: Helpful tag, Reviews/acc=============================#
+scaler = MinMaxScaler()
+dfmain['helpful_score'] = scaler.fit_transform(dfmain[['helpful']])
 
 
 
+#email_to_classify = df.text.values[10]
+
+#======================================Main Function===========================================#
+
+weights = {
+    'verification_check' : 0.2,   #done
+    'Autoencoder' : 0.25,         #done
+    'Classifier' : 0.25,          #done
+    'Sentiment_Score' : 0.15,
+    'Helpful_Score' : 0.15        #done
+}
+
+
+dfmain['FINAL_SCORE'] = (
+    verified['invert_verification_score'] * weights['verification_check'] +
+    anomaly_score['anomaly_score'] * weights['Autoencoder'] +
+    classifier['classifier_score'] * weights['Classifier'] +
+    vaders_result['normalized_sentiment_score'] * weights['Sentiment_Score'] +
+    dfmain['helpful_score'] * weights['Helpful_Score']
+)
+
+
+
+dfmain['FINAL_SCORE'] = (dfmain['FINAL_SCORE'])*100
+dfmain['FINAL_SCORE'] = (dfmain['FINAL_SCORE'])*100
+dfmain['FINAL_SCORE'] = (dfmain['FINAL_SCORE'])//70.63406896551724
+print(dfmain['FINAL_SCORE'])
 
