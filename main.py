@@ -35,6 +35,9 @@ from sklearn.preprocessing import MinMaxScaler
 
 from flask import Flask
 from flask_cors import CORS
+
+import textstat
+
 pd.options.display.memory_usage = 'deep'
 
 
@@ -227,14 +230,21 @@ dfmain['FINAL_SCORE'] = dfmain['FINAL_SCORE']//79.999999999999
 
 #============================================PROBLEM 2==================================================#
 Product_url = [
-    1,2,3,4,5,6
+    "https://www.amazon.co.uk/Earphones-In-ear-Black-Red-White/dp/B07166Q2LS/ref=cm_cr_srp_d_product_top?ie=UTF8",
+    "https://www.amazon.co.uk/XuDirect-In-Ear-Earphones-Black-Green/dp/B07166Q1VW/ref=cm_cr_srp_d_product_top?ie=UTF8",
+    "https://www.amazon.co.uk/AmazonBasics-E300-Sport-In-Ear-Headphones-Black/dp/B00L3KSRTW/ref=cm_cr_srp_d_product_top?ie=UTF8",
+    "https://www.amazon.co.uk/XuDirect-Earphones-In-Line-Headphones-Red/dp/B0714MM6N3/ref=cm_cr_srp_d_product_top?ie=UTF8",
+    "https://www.amazon.co.uk/Bluetooth-Speakers-XuDirect-Portable-Subwoofer-WHITE/dp/B01MQD4EWA/ref=cm_cr_srp_d_product_top?ie=UTF8",
+    "https://www.amazon.co.uk/Amazon-Fire-TV-Stick-Streaming-Media-Player/dp/B00KAKUN3E/ref=cm_cr_srp_d_product_top?ie=UTF8"
 ]
 
 
+proddf = pd.read_csv('product.csv')
+
 weights_2 = {
-    'rev_avg' : 0.25,   
-    'Autoencoder' : 0.2,         
-    'Classifier' : 0.25,          
+    'rev_avg' : 0.25,   #done
+    'Price_check' : 0.2,  #done   
+    'description_quality' : 0.25,          
     'Sentiment_Score' : 0.20,
     'Helpful_Score' : 0.10,
 }
@@ -253,16 +263,63 @@ for url in Product_url:
 results_df = pd.DataFrame(results)
 results_df['Final_score_avg'] = results_df['Final_score_avg']/100
 
+
 #============Check 2 : Price Check================#
+ppnp = np.array(proddf['Price'])
+mean_price = np.mean(ppnp)
+std_price = np.std(ppnp)
+
+z_score = (ppnp-mean_price)/std_price
+price_scores = -z_score
+
+min_score = np.min(price_scores)
+max_score = np.max(price_scores)
+normalized_price = (price_scores-min_score)/(max_score-min_score)
+results_df['normalized_price_z_score'] = normalized_price
+
 #============Check 3 : Listing Quality============#
 
-Product_score = (
-    results_df['Final_score_avg'] * weights['rev_avg'] +
-    anomaly_score['anomaly_score'] * weights['Autoencoder'] +
-    classifier['classifier_score'] * weights['Classifier'] +
-    vaders_result['normalized_sentiment_score'] * weights['Sentiment_Score'] +
-    dfmain['helpful_score'] * weights['Helpful_Score'] 
-)
+def preprocess_text(text):
+    text = text.lower()
+    text = ''.join([c for c in text if c not in ('!', '.', ':', ',', ';', '?')])
+    tokens = text.split()
+    tokens = [word for word in tokens if word not in stopwords.words('english')]
+    return tokens
+
+def lexical_diversity(tokens):
+    return len(set(tokens)) / len(tokens) if len(tokens) > 0 else 0
+
+
+
+def description_length(text):
+    return len(text.split())
+
+def calculate_usefulness(text):
+    readability = textstat.flesch_reading_ease(text)
+    return readability
+
+proddf['tokens'] = proddf['Description'].apply(preprocess_text)
+proddf['richness'] = proddf['tokens'].apply(lexical_diversity)
+proddf['length'] = proddf['Description'].apply(description_length)
+proddf['usefulness'] = proddf['Description'].apply(calculate_usefulness)
+proddf['length_normalized'] = proddf['length']/proddf['length'].max()
+proddf['usefulness_normalized'] = proddf['usefulness'] / proddf['usefulness'].max()
+
+results_df['description_score'] = (1- proddf['richness']) + (1-proddf['length_normalized']) + (1-proddf['usefulness_normalized'])
+results_df['description_score'] = results_df['description_score']/results_df['description_score'].max()
+#============Check 4 : Review Sentiment ============#
+
+
+
+
+
+#Product_score = (
+    #results_df['Final_score_avg'] * weights_2['rev_avg'] +
+    #results_df['normalized_price_z_score'] * weights_2['Price_check'] +
+    #results_df['description_score'] * weights['description_quality'] +
+    #vaders_result['normalized_sentiment_score'] * weights['Sentiment_Score'] +
+    #dfmain['helpful_score'] * weights['Helpful_Score'] 
+#)
 #============================================Flask Int===================================================#
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}})
@@ -272,4 +329,4 @@ def index():
     return str(dfmain['FINAL_SCORE'].iloc[-1])
 
 if __name__ == "__main__":
-    app.run(host = "127.0.0.1", port = 8080, debug = True)
+    app.run(host = "127.0.0.1", port = 5000, debug = True)
