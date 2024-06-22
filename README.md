@@ -27,9 +27,11 @@ The proliferation of counterfeit products on Amazon's marketplace poses a signif
 Similar to how we solved Problem 1, we chose specific parameters which define a scoring system. These parameters are:
 1) Average review score for a particular product which is taken from the previous problem.
 2) Price reletive to other products of the same category
-3) Quality of the listing (Readability, richness, detail, etc.
+3) Quality of the listing (Readability, richness, detail, etc.)
 4) Sentiment Analysis
 
 The models have been coded on python and have been integrated with a React.js frontend through Flask. To create the ML and NLP models, sci-kit learn, tensorflow and NLTK has been used.
 
 The **USP** of our product is the extensive analysis giving an accurate score. The project is easy to scale and this can be achieved by using pre-trained models for image analysis, using a better dataset (considering database constraints).
+
+The UI of our frontend depicts the ease of integration into pre-exisitng amazon services.
