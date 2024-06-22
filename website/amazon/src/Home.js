@@ -12,20 +12,45 @@ function Home() {
         />
         <div className="home_row">
           <Product
-            title="The leand startup"
-            price={29.99}
-            image="https://assets.bosecreative.com/transform/d3eff9c4-3559-4155-b5ac-acebb58c4456/QCH24_Black_001_RGB.png"
+            title="In Ear Black-Red Earphones"
+            price={49.99}
+            image="https://m.media-amazon.com/images/I/615SYkkPyDL._AC_SL1500_.jpg"
+            rating={3}
+          />
+          <Product
+            title="Amazon Fire-Tv Stick"
+            price={100}
+            image="https://m.media-amazon.com/images/I/7120GaDFhxL._AC_SL1000_.jpg"
+            rating={5}
+          />
+        </div>
+        <div className="home_row">
+          <Product
+            title="Portable Sub-Woofer"
+            price={4.99}
+            image="https://m.media-amazon.com/images/I/71FER1UJhcL._AC_SL1500_.jpg "
+            rating={1}
+          />
+          <Product
+            title="In Ear Earphones Black-Green"
+            price={49.99}
+            image="https://m.media-amazon.com/images/I/618zves-P8L._AC_SL1500_.jpg "
             rating={4}
           />
-          <Product />
+          <Product
+            title="Xu Direct In Line Headphones"
+            price={24.99}
+            image="https://m.media-amazon.com/images/I/71dtAOC-bLL._AC_SL1500_.jpg "
+            rating={4}
+          />
         </div>
         <div className="home_row">
-          <Product />
-          <Product />
-          <Product />
-        </div>
-        <div className="home_row">
-          <Product />
+          <Product
+            title="Amazon Basics E-300 Headphones"
+            price={70}
+            image="https://m.media-amazon.com/images/I/71VHRNgvpqL._AC_SL1500_.jpg "
+            rating={5}
+          />
         </div>
       </div>
     </div>
