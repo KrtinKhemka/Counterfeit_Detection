@@ -219,6 +219,50 @@ dfmain['FINAL_SCORE'] = dfmain['FINAL_SCORE']//79.999999999999
 
 #print(dfmain['FINAL_SCORE'].max())
 
+
+
+
+
+
+#============================================PROBLEM 2==================================================#
+Product_url = [
+    1,2,3,4,5,6
+]
+
+
+weights_2 = {
+    'rev_avg' : 0.25,   
+    'Autoencoder' : 0.2,         
+    'Classifier' : 0.25,          
+    'Sentiment_Score' : 0.20,
+    'Helpful_Score' : 0.10,
+}
+
+#===========Check 1 : Review average=============#
+results = []
+for url in Product_url:
+    product_reviews = dfmain[dfmain['product_link'] == url]
+    if not product_reviews.empty:
+        average_score = product_reviews['FINAL_SCORE'].mean()
+
+        results.append({'product_url': url, 'Final_score_avg':average_score})
+    else:
+        results.append({'product_url': url, 'Final_score_avg':None})
+
+results_df = pd.DataFrame(results)
+results_df['Final_score_avg'] = results_df['Final_score_avg']/100
+
+#============Check 2 : Price Check================#
+#============Check 3 : Listing Quality============#
+
+Product_score = (
+    results_df['Final_score_avg'] * weights['rev_avg'] +
+    anomaly_score['anomaly_score'] * weights['Autoencoder'] +
+    classifier['classifier_score'] * weights['Classifier'] +
+    vaders_result['normalized_sentiment_score'] * weights['Sentiment_Score'] +
+    dfmain['helpful_score'] * weights['Helpful_Score'] 
+)
+#============================================Flask Int===================================================#
 app = Flask(__name__)
 
 @app.route("/")
