@@ -35,3 +35,8 @@ The models have been coded on python and have been integrated with a React.js fr
 The **USP** of our product is the extensive analysis giving an accurate score. The project is easy to scale and this can be achieved by using pre-trained models for image analysis, using a better dataset (considering database constraints).
 
 The UI of our frontend depicts the ease of integration into pre-exisitng amazon services.
+
+##How to use
+
+###File Types:
+
