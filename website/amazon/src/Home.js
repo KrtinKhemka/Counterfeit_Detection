@@ -5,7 +5,6 @@ import Product from "./Product";
 function Home() {
   const [products, setProducts] = useState([]);
 
-
   return (
     <div className="Home">
       <div className="home-container">

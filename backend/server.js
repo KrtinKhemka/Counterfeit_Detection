@@ -47,16 +47,13 @@ app.get("/products", async (req, res) => {
   }
 });
 
-
-
 app.get("/products/:Unique_product_id", async (req, res) => {
+  const Unique_product_id = req.params.Unique_product_id;
 
-    const Unique_product_id = req.params.Unique_product_id;
+  const products = await Product.find({ Unique_product_id });
 
-        const products = await Product.find({ Unique_product_id});
-
-    res.json(products)
-})
+  res.json(products);
+});
 
 // Start the server
 app.listen(port, () => {
