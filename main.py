@@ -136,7 +136,7 @@ for i in range(len(df)):
 
 #vectorize 
 vectorizer = TfidfVectorizer()
-x = vectorizer.fit_transform(corpus).toarray()
+x = vectorizer.fit_transform(corpus) 
 y = df['label_num']
 x_train, x_test, y_train, y_test = train_test_split(x, y, test_size = 0.2, random_state=42)
 
@@ -242,11 +242,10 @@ Product_url = [
 proddf = pd.read_csv('product.csv')
 
 weights_2 = {
-    'rev_avg' : 0.25,   #done
-    'Price_check' : 0.2,  #done   
-    'description_quality' : 0.25,          
+    'rev_avg' : 0.3,   
+    'Price_check' : 0.2,     
+    'description_quality' : 0.3,          
     'Sentiment_Score' : 0.20,
-    'Helpful_Score' : 0.10,
 }
 
 #===========Check 1 : Review average=============#
@@ -308,18 +307,28 @@ proddf['usefulness_normalized'] = proddf['usefulness'] / proddf['usefulness'].ma
 results_df['description_score'] = (1- proddf['richness']) + (1-proddf['length_normalized']) + (1-proddf['usefulness_normalized'])
 results_df['description_score'] = results_df['description_score']/results_df['description_score'].max()
 #============Check 4 : Review Sentiment ============#
+sent = []
+for url in Product_url:
+    product_sentiment = dfmain[dfmain['product_link'] == url]
+    product_sentiment['Compound'] = vaders_result['compound']
+    sent.append(product_sentiment['Compound'].mean())
 
 
+results_df['sentiment_score'] = np.array(sent)
 
 
+#=================== Formula for calc===============================#
+proddf['PRODUCT_SCORE'] =  (
+    results_df['Final_score_avg'] * weights_2['rev_avg'] +
+    results_df['normalized_price_z_score'] * weights_2['Price_check'] +
+    results_df['description_score'] * weights_2['description_quality'] +
+    results_df['sentiment_score'] * weights_2['Sentiment_Score'] 
+)
 
-#Product_score = (
-    #results_df['Final_score_avg'] * weights_2['rev_avg'] +
-    #results_df['normalized_price_z_score'] * weights_2['Price_check'] +
-    #results_df['description_score'] * weights['description_quality'] +
-    #vaders_result['normalized_sentiment_score'] * weights['Sentiment_Score'] +
-    #dfmain['helpful_score'] * weights['Helpful_Score'] 
-#)
+proddf['PRODUCT_SCORE'] = proddf['PRODUCT_SCORE']*100
+proddf['PRODUCT_SCORE'] = proddf['PRODUCT_SCORE'].astype(int)
+
+
 #============================================Flask Int===================================================#
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}})
