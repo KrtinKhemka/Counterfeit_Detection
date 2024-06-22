@@ -310,7 +310,8 @@ results_df['description_score'] = results_df['description_score']/results_df['de
 sent = []
 for url in Product_url:
     product_sentiment = dfmain[dfmain['product_link'] == url]
-    product_sentiment['Compound'] = vaders_result['compound']
+    product_sentiment = product_sentiment.copy()
+    product_sentiment.loc[:, 'Compound'] = vaders_result['compound']
     sent.append(product_sentiment['Compound'].mean())
 
 
@@ -329,6 +330,7 @@ proddf['PRODUCT_SCORE'] = proddf['PRODUCT_SCORE']*100
 proddf['PRODUCT_SCORE'] = proddf['PRODUCT_SCORE'].astype(int)
 
 
+print(proddf['PRODUCT_SCORE'])
 #============================================Flask Int===================================================#
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}})
