@@ -2,7 +2,7 @@ import React from "react";
 import "./Product.css";
 import { Link } from "react-router-dom";
 
-function Product({ id, title, image, price, rating }) {
+function Product({ title, image, price, rating }) {
   return (
     <div className="product">
       <div className="product_info">

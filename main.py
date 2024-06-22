@@ -34,6 +34,7 @@ from tensorflow.keras.models import Model
 from sklearn.preprocessing import MinMaxScaler
 
 from flask import Flask
+from flask_cors import CORS
 pd.options.display.memory_usage = 'deep'
 
 
@@ -264,6 +265,7 @@ Product_score = (
 )
 #============================================Flask Int===================================================#
 app = Flask(__name__)
+CORS(app, resources={r"/*": {"origins": "*"}})
 
 @app.route("/")
 def index():
