@@ -34,6 +34,7 @@ from tensorflow.keras.models import Model
 from sklearn.preprocessing import MinMaxScaler
 
 from flask import Flask
+from flask_cors import CORS
 pd.options.display.memory_usage = 'deep'
 
 
@@ -220,6 +221,7 @@ dfmain['FINAL_SCORE'] = dfmain['FINAL_SCORE']//79.999999999999
 #print(dfmain['FINAL_SCORE'].max())
 
 app = Flask(__name__)
+CORS(app, resources={r"/*": {"origins": "*"}})
 
 @app.route("/")
 def index():
