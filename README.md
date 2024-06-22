@@ -60,3 +60,9 @@ The UI of our frontend depicts the ease of integration into pre-exisitng amazon 
 3) To run the Python script (assuming you have Python installed), in cmd/terminal run ```pip install -r requirements.txt```
 4) From the counterfeit_Detection folder, navigate to the amazon folder (```cd ./website/amazon```) and in terminal run ```npm start```
 5) In a new terminal, navigate to the backend folder and run ```node server.js```
+
+## Images
+![Screenshot 2024-06-22 at 11 43 43 PM](https://github.com/Snimso/Counterfeit_Detection/assets/58828519/e658d4a2-ca4d-4006-b123-611b46c42a32)
+![Screenshot 2024-06-22 at 11 44 00 PM](https://github.com/Snimso/Counterfeit_Detection/assets/58828519/958e834c-0c1e-4bec-a027-c9a37bf9e1dd)
+![Screenshot 2024-06-22 at 11 45 17 PM](https://github.com/Snimso/Counterfeit_Detection/assets/58828519/94d256cb-65fe-43fd-a0d9-dc0691cae03f)
+<img width="954" alt="Screenshot 2024-06-22 at 11 50 16 PM" src="https://github.com/Snimso/Counterfeit_Detection/assets/58828519/6cf64658-3f56-4fa3-8f51-38e15ac727b3">
