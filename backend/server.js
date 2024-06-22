@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 
 const app = express();
-const port = 5000;
+const port = 8000;
 
 app.use(cors());
 app.use(express.json());
@@ -38,16 +38,9 @@ const productSchema = new mongoose.Schema({
 const Product = mongoose.model("Product", productSchema, "amazon");
 
 // Route to get products
-app.get('/products/:Unique_product_id', async (req, res) => {
+app.get("/products", async (req, res) => {
   try {
-    const uniqueId = req.params.Unique_product_id;
-    
-    const products = await Product.find({ Unique_product_id });
-
-    if (products.length === 0) {
-      return res.status(404).json({ message: 'No products found with the given ID.' });
-    }
-
+    const products = await Product.find();
     res.json(products);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -55,18 +48,15 @@ app.get('/products/:Unique_product_id', async (req, res) => {
 });
 
 
-app.get('/products/:uniqueId', async (req, res) => {
-  try {
-    const uniqueId = req.params.uniqueId;
-    const product = await Product.findOne({ Unique_product_id: uniqueId });
-    if (!product) {
-      return res.status(404).send('Product not found');
-    }
-    res.json(product);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-});
+
+app.get("/products/:Unique_product_id", async (req, res) => {
+
+    const Unique_product_id = req.params.Unique_product_id;
+
+        const products = await Product.find({ Unique_product_id});
+
+    res.json(products)
+})
 
 // Start the server
 app.listen(port, () => {
