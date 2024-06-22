@@ -2,6 +2,7 @@ import "./App.css";
 import Header from "./Header";
 import Home from "./Home";
 import Productlisting from "./Productlisting";
+
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import React, { useState, useEffect } from "react";
 
@@ -19,6 +20,7 @@ function App() {
         console.error("Error fetching data:", error);
       });
   }, []);
+  
   return (
     //BEM
     <Router>

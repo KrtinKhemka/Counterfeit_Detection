@@ -1,12 +1,13 @@
-import React from "react";
-import "./Productlisting.css";
+import React, { useState } from 'react';
+import './Productlisting.css';
+import { Link } from "react-router-dom";
 
-function Productlisting({Data }) {
-  return (
-    <div>
-      <p>{Data}</p>
-    </div>
-  );
+
+
+function Productlisting() { 
+  
+
+
 }
 
 export default Productlisting;

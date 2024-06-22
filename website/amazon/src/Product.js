@@ -2,9 +2,17 @@ import React from "react";
 import "./Product.css";
 import { Link } from "react-router-dom";
 
-function Product({ title, image, price, rating }) {
+function Product({
+  className,
+  title,
+  image,
+  price,
+  rating,
+  Unique_product_id,
+}) {
+  const productClass = className ? `${className} product` : "product";
   return (
-    <div className="product">
+    <div className={productClass}>
       <div className="product_info">
         <p> {title}</p>
         <p className="product_price">
@@ -20,7 +28,8 @@ function Product({ title, image, price, rating }) {
         </div>
       </div>
       <img className="product_img" src={image} />
-      <Link to="/Productlisting">
+
+      <Link to={`/product/${Unique_product_id}`}>
         <button className="Product_button">View Listing</button>
       </Link>
     </div>
