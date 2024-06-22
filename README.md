@@ -58,8 +58,9 @@ The UI of our frontend depicts the ease of integration into pre-exisitng amazon 
 1) Ensure that node.js and npm are installed and can be used from the cmd/terminal.
 2) Clone the repository and navigate to the project location in the cmd/terminal.
 3) To run the Python script (assuming you have Python installed), in cmd/terminal run ```pip install -r requirements.txt```
-4) From the counterfeit_Detection folder, navigate to the amazon folder (```cd ./website/amazon```) and in terminal run ```npm start```
-5) In a new terminal, navigate to the backend folder and run ```node server.js```
+4) In a new terminal, navigate to the backend folder and run ```node server.js```
+5) From the counterfeit_Detection folder, navigate to the amazon folder (```cd ./website/amazon```) and in terminal run ```npm start```
+
 
 ## Images
 ![Screenshot 2024-06-22 at 11 43 43 PM](https://github.com/Snimso/Counterfeit_Detection/assets/58828519/e658d4a2-ca4d-4006-b123-611b46c42a32)
