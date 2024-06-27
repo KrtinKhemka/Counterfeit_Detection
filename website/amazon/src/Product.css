@@ -11,6 +11,8 @@
   max-height: 400px;
   min-width: 100px;
   border: solid 2px green;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 .product > img {
   max-height: 200px;
