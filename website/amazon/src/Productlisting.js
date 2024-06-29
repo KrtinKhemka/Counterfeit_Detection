@@ -80,6 +80,7 @@ function Productlisting() {
           <p>
             <strong>Price:</strong> ${products[0].Price}
           </p>
+          
           <p className={`prod-score ${isFake ? "fake" : ""}`}>
             <strong>Product Trust Index:</strong>
             {` ${100 - products[0].Product_score}`}
@@ -117,13 +118,13 @@ function Productlisting() {
           className={`button ${isSorted ? "active" : ""}`}
           onClick={sortReviewsByTrustIndex}
         >
-          Sort by Trust Index
+          Sort by Trust
         </button>
         <button
           className={`button ${isFiltered ? "active" : ""}`}
           onClick={removeLowTrustIndexReviews}
         >
-          Remove Low Trust Index Reviews
+          Trusted Reviews only
         </button>
       </div>
       <div className="reviews">

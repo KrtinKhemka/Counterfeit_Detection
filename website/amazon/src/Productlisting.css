@@ -100,6 +100,7 @@
 }
 
 /* Review card styles */
+
 .product-card {
   background-color: #fff;
   border: 1px solid #ddd;
@@ -107,7 +108,14 @@
   padding: 20px;
   margin-bottom: 20px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease; /* Add this for the pop-out effect */
 }
+
+.product-card:hover {
+  transform: scale(1.05); /* Add this for the pop-out effect */
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Enhance shadow for better effect */
+}
+
 
 .product-info {
   display: flex;
