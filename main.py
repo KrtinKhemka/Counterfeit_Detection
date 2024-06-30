@@ -38,6 +38,18 @@ from flask_cors import CORS
 
 import textstat
 
+from transformers import BertTokenizer, BertForSequenceClassification, TrainingArguments, Trainer, AutoTokenizer, AutoModelForSequenceClassification
+import torch
+import torch.quantization
+import torch.nn.utils.prune as prune
+import requests
+
+from scipy.special import softmax
+
+from datasets import load_dataset, load_metric
+from tensorflow.keras.callbacks import EarlyStopping
+
+
 pd.options.display.memory_usage = 'deep'
 
 
@@ -64,10 +76,10 @@ verified['invert_verification_score'] = 1 - verified['verification_score']  # 0 
 
 #======================Parameter B: Autoencoder for anomaly detection============================#
 texts = dfmain['review'] 
-tokenizer = Tokenizer(num_words = 10000)
-tokenizer.fit_on_texts(texts)
-sequences = tokenizer.texts_to_sequences(texts)
-word_index = tokenizer.word_index
+tokenizer1 = Tokenizer(num_words = 10000)
+tokenizer1.fit_on_texts(texts)
+sequences = tokenizer1.texts_to_sequences(texts)
+word_index = tokenizer1.word_index
 
 max_len = 100  # Define a max length for padding
 data_padded = pad_sequences(sequences, maxlen=max_len)
@@ -85,7 +97,9 @@ decoded = Dense(input_dim, activation='sigmoid')(encoded)
 autoencoder = Model(input_layer, decoded)
 autoencoder.compile(optimizer='adam', loss='binary_crossentropy')
 
-autoencoder.fit(data_padded, data_padded, epochs=50, batch_size=256, shuffle=True, validation_split=0.2)
+early_stopping = EarlyStopping(monitor='val_loss', patience=5, restore_best_weights=True)
+
+autoencoder.fit(data_padded, data_padded, epochs=50, batch_size=64, shuffle=True, validation_split=0.2, verbose = 1)
 
 
 reconstructions = autoencoder.predict(data_padded)
@@ -106,8 +120,6 @@ for i in range(len(anomalies)):
     
 
 anomaly_score = pd.DataFrame(anomaly_score_dict)
-
-
 
 #print(fake_reviews)
 
@@ -197,14 +209,32 @@ dfmain['helpful_score'] = scaler.fit_transform(dfmain[['helpful']])
 dfmain['helpful_score'] = 1 - dfmain['helpful_score']
 
 
+
+#=======================Parameter F: LLM INTEGRATION===================================#
+
+tokenizer = BertTokenizer.from_pretrained('./fine-tuned-bert')
+model = BertForSequenceClassification.from_pretrained('./fine-tuned-bert')
+
+def get_authenticity_score(text):
+    inputs = tokenizer(text, return_tensors='pt', max_length=512, truncation=True, padding=True)
+    with torch.no_grad():
+        outputs = model(**inputs)
+    scores = torch.softmax(outputs.logits, dim=1).numpy()
+    authenticity_score = scores[0][1]  # assuming the second class is "authentic"
+    return authenticity_score
+
+dfmain['authenticity_score'] = dfmain['review'].apply(get_authenticity_score)
+
+dfmain['authenticity_score'].to_csv('authenticity_score.csv')
 #======================================Main Function===========================================#
 
 weights = {
     'verification_check' : 0.25,   
     'Autoencoder' : 0.2,         
     'Classifier' : 0.25,          
-    'Sentiment_Score' : 0.20,
+    'Sentiment_Score' : 0.10,
     'Helpful_Score' : 0.10,
+    'llms_score' : 0.10
 }
 
 
@@ -213,15 +243,16 @@ dfmain['FINAL_SCORE'] = (
     anomaly_score['anomaly_score'] * weights['Autoencoder'] +
     classifier['classifier_score'] * weights['Classifier'] +
     vaders_result['normalized_sentiment_score'] * weights['Sentiment_Score'] +
-    dfmain['helpful_score'] * weights['Helpful_Score'] 
+    dfmain['helpful_score'] * weights['Helpful_Score'] +
+    dfmain['authenticity_score'] * weights['llms_score']
 )
 
 
 
 dfmain['FINAL_SCORE'] = (dfmain['FINAL_SCORE'])*10000
-dfmain['FINAL_SCORE'] = dfmain['FINAL_SCORE']//79.999999999999
+dfmain['FINAL_SCORE'] = dfmain['FINAL_SCORE']//max(dfmain['FINAL_SCORE'])
 
-#print(dfmain['FINAL_SCORE'].max())
+print(dfmain['FINAL_SCORE'].max())
 
 
 
@@ -250,10 +281,12 @@ weights_2 = {
 
 #===========Check 1 : Review average=============#
 results = []
+colors = []
 for url in Product_url:
     product_reviews = dfmain[dfmain['product_link'] == url]
     if not product_reviews.empty:
         average_score = product_reviews['FINAL_SCORE'].mean()
+
 
         results.append({'product_url': url, 'Final_score_avg':average_score})
     else:
@@ -330,7 +363,10 @@ proddf['PRODUCT_SCORE'] = proddf['PRODUCT_SCORE']*100
 proddf['PRODUCT_SCORE'] = proddf['PRODUCT_SCORE'].astype(int)
 
 
-print(proddf['PRODUCT_SCORE'])
+
+
+
+
 #============================================Flask Int===================================================#
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}})
