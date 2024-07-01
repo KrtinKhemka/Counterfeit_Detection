@@ -1,6 +1,6 @@
 /* Container for the entire product listing */
 .product-listing {
-  width: 80%; /* Reduced width */
+  width: 80%;
   margin: 0 auto;
   padding: 20px;
   background-color: #ffffff;
@@ -79,6 +79,9 @@
   text-align: center;
   transition: background-color 0.3s ease, border-color 0.3s ease;
   outline: none;
+  display: flex; /* Flexbox for proper alignment */
+  align-items: center; /* Center align items */
+  gap: 5px; /* Space between icon and text */
 }
 
 .button:hover {
@@ -91,16 +94,21 @@
   border-color: #a88734 #9c7e31 #846a29;
 }
 
+.sorticon,
+.filtericon {
+  font-size: 20px;
+}
+
 /* Container for buttons */
 .button-container {
   display: flex;
   gap: 10px;
   margin-top: 20px;
   margin-bottom: 20px;
+  justify-content: flex-end; /* Align buttons to the right */
 }
 
 /* Review card styles */
-
 .product-card {
   background-color: #fff;
   border: 1px solid #ddd;
@@ -115,7 +123,6 @@
   transform: scale(1.05); /* Add this for the pop-out effect */
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Enhance shadow for better effect */
 }
-
 
 .product-info {
   display: flex;
@@ -219,4 +226,12 @@ button {
 .rev-score {
   font-weight: bold;
   color: #333;
+}
+
+.Serial-Number-Verifier {
+  color: black;
+}
+
+.serial {
+  margin-left: auto;
 }

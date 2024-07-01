@@ -1,9 +1,13 @@
 import React, { useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import "./Productlisting.css";
-import { useParams } from "react-router-dom";
+import SortIcon from "@mui/icons-material/Sort";
+import FilterListIcon from "@mui/icons-material/FilterList";
 
 function Productlisting() {
   const { Unique_product_id } = useParams();
+  const navigate = useNavigate();
   const [products, setProducts] = useState(null);
   const [sortedReviews, setSortedReviews] = useState([]);
   const [isSorted, setIsSorted] = useState(false);
@@ -62,6 +66,10 @@ function Productlisting() {
     (product) => product.id === Unique_product_id
   );
 
+  const handleSerialNumberVerification = () => {
+    navigate(`/serial-verification/${Unique_product_id}`);
+  };
+
   return (
     <div className="product-listing">
       <div className="product-container">
@@ -80,11 +88,11 @@ function Productlisting() {
           <p>
             <strong>Price:</strong> ${products[0].Price}
           </p>
-          
           <p className={`prod-score ${isFake ? "fake" : ""}`}>
-            <strong>Product Trust Index:</strong>
-            {` ${100 - products[0].Product_score}`}
+            <strong>Product Trust Index:</strong>{" "}
+            {100 - products[0].Product_score}
           </p>
+
           <div className="progress-bar-prod">
             <div
               className="progress"
@@ -118,13 +126,21 @@ function Productlisting() {
           className={`button ${isSorted ? "active" : ""}`}
           onClick={sortReviewsByTrustIndex}
         >
-          Sort by Trust
+          Sort by Trust <SortIcon className="sorticon"></SortIcon>
         </button>
         <button
           className={`button ${isFiltered ? "active" : ""}`}
           onClick={removeLowTrustIndexReviews}
         >
-          Trusted Reviews only
+          Trusted Reviews only{" "}
+          <FilterListIcon className="filtericon"></FilterListIcon>
+        </button>
+
+        <button
+          className="button serial"
+          onClick={handleSerialNumberVerification}
+        >
+          Report Fake Product
         </button>
       </div>
       <div className="reviews">
