@@ -1,4 +1,3 @@
-# Counterfeit_Detection
 ## Team Council
 
 ### Note:
@@ -44,15 +43,16 @@ The **USP** of our product is the extensive analysis giving an accurate score. T
 The UI of our frontend depicts the ease of integration into pre-exisitng amazon services.
 
 ## File Types:
-1)Main.py: Contains the actual machine learning models and all the data frame used in the models.
-2)transfromer_pipeline.py: This contains a prebuilt transformer-pipeline not currently used due to token constraints. Added to demonstrate **scalability** of project.
-3)backend: Contains our backend server.
-4)website/amazon: Contains our frontend files.
-5)Csv files: a) Classifer_dataset.csv: CSV file used to train the classifier.(See problem 1, paramter 3 in main.py)
+1) Main.py: Contains the actual machine learning models and all the data frame used in the models.
+2) transfromer_pipeline.py: This contains a prebuilt transformer-pipeline not currently used due to token constraints. Added to demonstrate **scalability** of project.
+3) backend: Contains our backend server.
+4) website/amazon: Contains our frontend files.
+5) Csv files:
+    - a) Classifer_dataset.csv: CSV file used to train the classifier.(See problem 1, paramter 3 in main.py)
               (source: https://osf.io/3vds7)
-            b) final_dataset.csv: Main Dataset used for obtaining the reviews.
-            c) product.csv: Main dataset used for obtaining products. (derived from final_dataset.csv)
-            d) Finalfrontenddb.csv: Dataset used for making the backend node.js server
+    - b) final_dataset.csv: Main Dataset used for obtaining the reviews.
+    - c) product.csv: Main dataset used for obtaining products. (derived from final_dataset.csv)
+    - d) Finalfrontenddb.csv: Dataset used for making the backend node.js server
 
 ## How to use:
 1) Ensure that node.js and npm are installed and can be used from the cmd/terminal.
@@ -63,7 +63,13 @@ The UI of our frontend depicts the ease of integration into pre-exisitng amazon 
 
 
 ## Images
-![Screenshot 2024-06-22 at 11 43 43 PM](https://github.com/Snimso/Counterfeit_Detection/assets/58828519/e658d4a2-ca4d-4006-b123-611b46c42a32)
-![Screenshot 2024-06-22 at 11 44 00 PM](https://github.com/Snimso/Counterfeit_Detection/assets/58828519/958e834c-0c1e-4bec-a027-c9a37bf9e1dd)
-![Screenshot 2024-06-22 at 11 45 17 PM](https://github.com/Snimso/Counterfeit_Detection/assets/58828519/94d256cb-65fe-43fd-a0d9-dc0691cae03f)
-<img width="954" alt="Screenshot 2024-06-22 at 11 50 16 PM" src="https://github.com/Snimso/Counterfeit_Detection/assets/58828519/6cf64658-3f56-4fa3-8f51-38e15ac727b3">
+
+<img width="1800" alt="Screenshot_2024-07-01_at_10 43 24_PM" src="https://github.com/Snimso/Counterfeit_Detection/assets/115739027/cfab7019-a637-46e1-a542-c3b683128ca3">
+
+<img width="1800" alt="Screenshot_2024-07-01_at_10 43 26_PM" src="https://github.com/Snimso/Counterfeit_Detection/assets/115739027/2be7cba1-0cda-431e-86e5-a06a35763561">
+
+<img width="1800" alt="Screenshot_2024-07-01_at_10 43 29_PM" src="https://github.com/Snimso/Counterfeit_Detection/assets/115739027/a03ba29c-55ea-4eaa-ac33-303dc8bebbc9">
+
+<img width="1800" alt="Screenshot_2024-07-01_at_10 43 32_PM" src="https://github.com/Snimso/Counterfeit_Detection/assets/115739027/4618538b-bf87-4186-b424-1564066e3fe9">
+
+<img width="1800" alt="Screenshot_2024-07-01_at_10 43 41_PM" src="https://github.com/Snimso/Counterfeit_Detection/assets/115739027/15e1c932-2322-4c9d-9413-9e2cdf6bdf65">
