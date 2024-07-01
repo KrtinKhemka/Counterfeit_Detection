@@ -38,6 +38,7 @@ function SerialVerification() {
   return (
     <div className="serial-verification">
       <h1>Serial Number Verification</h1>
+      
       <input
         type="text"
         value={serialNumber}

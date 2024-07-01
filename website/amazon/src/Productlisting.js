@@ -136,12 +136,12 @@ function Productlisting() {
           <FilterListIcon className="filtericon"></FilterListIcon>
         </button>
 
-        <button
+        {/* <button
           className="button serial"
           onClick={handleSerialNumberVerification}
         >
           Report Fake Product
-        </button>
+        </button> */}
       </div>
       <div className="reviews">
         {sortedReviews.map((product) => (
