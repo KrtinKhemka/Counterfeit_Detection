@@ -1,5 +1,6 @@
 ## Team Council
 
+## Amazon HackOn Season 4, Second Runners Up
 ### Note:
 1) The option to leave a custom review on the product listing and the website hosting will be incorporated by the next round.
 2) The scoring scheme is as follows: a higher score depicts that, according to our algorithm, the probability of that product/review being fake is higher.
