@@ -3,10 +3,9 @@
 ## Amazon HackOn Season 4, Second Runners Up
 ### Note:
 1) The option to leave a custom review on the product listing and the website hosting will be incorporated by the next round.
-2) The scoring scheme is as follows: a higher score depicts that, according to our algorithm, the probability of that product/review being fake is higher.
-3) On our homepage, a red border around the product indicates that the product has been flagged as bogus, according to our model.
-4) Our algorithm (including all the ML models) has been trained on real-world datasets and is considerably accurate. (Outputs low review score for authentic amazon products)
-5) The website is optimised to run on devices of all aspect ratios.
+2) On our homepage, a red border around the product indicates that the product has been flagged as bogus, according to our model.
+3) Our algorithm (including all the ML models) has been trained on real-world datasets and is considerably accurate. (Outputs low review score for authentic amazon products)
+4) The website is optimised to run on devices of all aspect ratios.
 
 ## Project Pitch
 Through this project, we have decided to solve two crucial problems considering factors like scalability and depth of solution. 
