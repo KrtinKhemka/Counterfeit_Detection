@@ -11,7 +11,7 @@ app.use(express.json());
 // Updated MongoDB connection string with database name
 mongoose
   .connect(
-    "mongodb+srv://priyanshushekhar100:L0YxKHq2WYJHBkvg@cluster0.kfc1wq1.mongodb.net/amazon?authMechanism=SCRAM-SHA-1"
+    "mongodb+srv://priyanshushekhar100:mongodb@cluster0.kfc1wq1.mongodb.net/amazon?authMechanism=SCRAM-SHA-1"
   )
   .then(() => console.log("MongoDB connection successful"))
   .catch((err) => console.error("MongoDB connection error:", err));
