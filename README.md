@@ -1,4 +1,4 @@
-
+#### 2nd Runner-Up: Amazon HackOn (Out of 45,000+ Participants)
 ### Note:
 1) The option to leave a custom review on the product listing and the website hosting will be incorporated by the next round.
 2) On our homepage, a red border around the product indicates that the product has been flagged as bogus, according to our model.
